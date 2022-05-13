@@ -84,7 +84,7 @@ void Draw::DrawWin()
 		
 	
 	char TT[256] = { 0 };
-	sprintf_s(TT, u8"玩家数量%d \nPed数量:%d\nX:%.2f\nY:%.2f\nZ:%.2f", playerCount, m_cur_peds, myPosV3.X, myPosV3.Y, myPosV3.Z);
+	sprintf_s(TT, u8"%.1f FPS\n玩家数量%d \nPed数量:%d\nX:%.2f\nY:%.2f\nZ:%.2f", ImGui::GetIO().Framerate,playerCount, m_cur_peds, myPosV3.X, myPosV3.Y, myPosV3.Z);
 	ImGui::GetForegroundDrawList()->AddText(font, font->FontSize,ImVec2(10,100), IMCOLOR_深红色, TT);
 
 
@@ -174,11 +174,15 @@ void Draw::DrawWin()
 
 		if (esp_2D_ShowBone_flag)
 		{
-			// 骨骼
+			// 骨骼 0 : 头 7:脖子 8：臀部  5 ，6 手 3,4脚踝，1 2 脚指头
+			DrawBone(m_ped_list, 0, 0, IMCOLOR_WHITE);
+
 			DrawBone(m_ped_list, 0, 7, IMCOLOR_WHITE);
 			DrawBone(m_ped_list, 7, 8, IMCOLOR_WHITE);
+
 			DrawBone(m_ped_list, 8, 3, IMCOLOR_WHITE);
 			DrawBone(m_ped_list, 8, 4, IMCOLOR_WHITE);
+
 			DrawBone(m_ped_list, 7, 5, IMCOLOR_WHITE);
 			DrawBone(m_ped_list, 7, 6, IMCOLOR_WHITE);
 		}
@@ -214,9 +218,7 @@ void Draw::DrawWin()
 		}
 		
 	}
-
 }
-
 
 void Draw::Draw2DBox(const ImVec2& screenV2, const ImVec2& boxV2, ImColor col)
 {
@@ -266,12 +268,19 @@ void Draw::Draw2DNameText(const ImVec2& screenV2, const ImVec2& boxV2, ImColor c
 
 void Draw::DrawBone(long long offset, int bone0, int bone1, ImColor col)
 {
-	ImVec2 v2Bone0 = Helpers::WorldToScreen(Helpers::GetBonePosition(offset, bone0));
-	ImVec2 v2Bone1 = Helpers::WorldToScreen(Helpers::GetBonePosition(offset, bone1));
+	auto V3Bone0 = Helpers::GetBonePosition(offset, bone0);
+	auto V3Bone1 = Helpers::GetBonePosition(offset, bone1);
+	ImVec2 v2Bone0 = Helpers::WorldToScreen(V3Bone0);
+	ImVec2 v2Bone1 = Helpers::WorldToScreen(V3Bone1);
 
 	if (!Helpers::IsNullVector2(v2Bone0) && !Helpers::IsNullVector2(v2Bone1))
 	{
 		ImGui::GetForegroundDrawList()->AddLine(ImVec2(v2Bone0.x, v2Bone0.y), ImVec2(v2Bone1.x, v2Bone1.y), col);
+
+		if (bone0 == 0 && bone1 == 0)
+		{
+			ImGui::GetForegroundDrawList()->AddCircle(v2Bone0, Helpers::GetBoxWH(V3Bone0).x/9, col,20);
+		}
 		
 	}
 }
