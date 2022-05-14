@@ -99,7 +99,7 @@ void Aimbot::AimbotThread()
 		if (isPlayerInCar != 0x00 && aimBot_Min_Distance != Setting::AimBot_Fov)
 		{
 			 //默认按住Ctrl键自瞄
-			if (GetKeyState(Setting::AimBot_Key) & 0x8000)
+			if (GetAsyncKeyState(Setting::AimBot_Key) & 0x8000)
 			{
 				if (isFPP == 0)
 				{

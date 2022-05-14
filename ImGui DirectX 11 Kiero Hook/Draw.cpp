@@ -39,7 +39,7 @@ void Draw::DrawWin()
 
 	/*float gview_width = DataManger::windowData.Width / 2;
 	float gview_height = DataManger::windowData.Height / 2;*/
-
+	static bool ShowCrosshair = false;
 
 	long long m_ped_factory = Memory::ReadMem<long long>(DataManger::hProcess,Globals::WorldPTR);
 	long long m_local_ped = Memory::ReadMem<long long>(DataManger::hProcess,m_ped_factory + 0x08);
@@ -178,14 +178,40 @@ void Draw::DrawWin()
 				ImGui::EndTabItem();
 			}
 
-
-
 			if (ImGui::BeginTabItem(u8"AimBot"))
 			{
 				
 				ImGui::Checkbox(u8"开启AimBot", &Setting::Aimbot_Falgs);
+				ImGui::Checkbox(u8"显示准星", &ShowCrosshair);
+
+				
+
 				if (Setting::Aimbot_Falgs)
 				{
+					const char* items[] = {u8"CTRL",u8"鼠标左键",u8"鼠标右键",u8"ALT",u8"SHIFT"};
+					static int item_current_idx = 0; // Here we store our selection data as an index.
+					ImGui::Combo("AimBot 按键", &item_current_idx, items, IM_ARRAYSIZE(items));
+					switch (item_current_idx)
+					{
+					case 0:
+						Setting::AimBot_Key = VK_CONTROL;
+						break;
+					case 1:
+						Setting::AimBot_Key = VK_LBUTTON;
+						break;
+					case 2:
+						Setting::AimBot_Key = VK_RBUTTON;
+						break;
+					case 3:
+						Setting::AimBot_Key = VK_MENU;
+						break;
+					case 4:
+						Setting::AimBot_Key = VK_SHIFT;
+						break;
+					default:
+						break;
+					}
+
 					ImGui::SliderFloat(u8"AimBot范围", &Setting::AimBot_Fov, 0.1, 1300);
 					ImGui::Checkbox(u8"显示范围", &Setting::Aimbot_ShowFov);
 					ImGui::Checkbox(u8"射击NPC", &Setting::AimBot_ShootNPC);
@@ -210,7 +236,11 @@ void Draw::DrawWin()
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		ImGui::End();
 	}
-		
+
+	if (ShowCrosshair)
+	{
+		DrawCrosshair(IMCOLOR_淡青色, 12.0f);
+	}
 	
 	char TT[256] = { 0 };
 	sprintf_s(TT, u8"%.1f FPS\n玩家数量%d \nPed数量:%d\nW:%d H:%d", ImGui::GetIO().Framerate,playerCount, m_cur_peds,gview_width,gview_height);
@@ -443,5 +473,14 @@ void Draw::Draw2DHealthText(const ImVec2& screenV2, const ImVec2& boxV2, ImColor
 	sprintf_s(TT, u8"[%d] HP:%.0f/%.0f", index,health, maxHealth);
 	ImGui::GetForegroundDrawList()->AddText(font, font->FontSize, ImVec2(screenV2.x + boxV2.x / 2 + boxV2.x / 8 - boxV2.x / 10, screenV2.y - boxV2.y / 2),
 		col, TT);
+}
+
+void Draw::DrawCrosshair(ImColor col, float length)
+{
+	
+	ImGui::GetForegroundDrawList()->AddLine(ImVec2(gview_width - length, gview_height), ImVec2(gview_width + length, gview_height), col);
+
+	ImGui::GetForegroundDrawList()->AddLine(ImVec2(gview_width, gview_height - length), ImVec2(gview_width, gview_height + length), col);
+
 }
 

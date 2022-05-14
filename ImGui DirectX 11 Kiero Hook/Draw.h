@@ -12,5 +12,6 @@ public:
 	static void Draw2DNameText(const ImVec2& p_min, const ImVec2& p_max, ImColor col,const char* name, float distance);
 	static void DrawBone(long long offset, int bone0, int bone1, ImColor col);
 	static void Draw2DHealthText(const ImVec2& screenV2, const ImVec2& boxV2, ImColor col,float health, float maxHealth, int index);
+	static void DrawCrosshair(ImColor col,float length);
 };
 
