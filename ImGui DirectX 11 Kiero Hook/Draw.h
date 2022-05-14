@@ -1,6 +1,6 @@
 #pragma once
 #include "includes.h"
-
+#define FLOATCOLORTOIMCOLOR(name) ImColor(name[0] * 255.0f, name[1] * 255.0f, name[2] * 255.0f)
 class Draw
 {
 public:

@@ -42,6 +42,7 @@ LRESULT __stdcall WndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 	{
 	case WM_LBUTTONDOWN: case WM_LBUTTONDBLCLK:    case WM_RBUTTONDOWN: case WM_RBUTTONDBLCLK:
 	case WM_MBUTTONDOWN: case WM_MBUTTONDBLCLK:    case WM_XBUTTONDOWN: case WM_XBUTTONDBLCLK:
+	case WM_LBUTTONUP: case WM_RBUTTONUP: case WM_MOUSEWHEEL: case WM_MOUSEMOVE:
 		if (Setting::checkBoxFalgs_1) return true;
 	}
 	return CallWindowProc(oWndProc, hWnd, uMsg, wParam, lParam);
