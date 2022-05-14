@@ -131,10 +131,10 @@ BOOL WINAPI DllMain(HMODULE hMod, DWORD dwReason, LPVOID lpReserved)
 		Cmain = CreateThread(nullptr, 0, MainThread, hMod, 0, nullptr);
 		break;
 	case DLL_PROCESS_DETACH:
+		kiero::shutdown();
+		SetWindowLongPtr(window, GWLP_WNDPROC, (LONG_PTR)oWndProc);
 		CloseHandle(KeyTH);
 		CloseHandle(Cmain);
-		SetWindowLongPtr(window, GWLP_WNDPROC, (LONG_PTR)oWndProc);
-		kiero::shutdown();
 		break;
 	}
 	return TRUE;

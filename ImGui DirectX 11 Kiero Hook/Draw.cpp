@@ -33,11 +33,9 @@ void Draw::DrawWin()
 	static float colorLine_player[3] = { 131.0f / 255.f,175.0f / 255.f,155.0f / 255.f };
 	static float colorLine_NPC[3] = { 1,1,1 };
 
-	static float colorBone[3] = { 1,1,1 };
-	static float colorBlood[3] = { 254.0f / 255.f,67.0f / 255.f,101.0f / 255.f };
+	static float colorBone_NPC[3] = { 1,1,1 };
+	static float colorBone_player[3] = { 131.0f / 255.f,175.0f / 255.f,155.0f / 255.f };
 
-	static float colorbloodNum_player[3] = { 252.0f / 255.f,157.0f / 255.f,154.0f / 255.f };
-	static float colorbloodNum_NPC[3] = { 1,1,1 };
 
 	/*float gview_width = DataManger::windowData.Width / 2;
 	float gview_height = DataManger::windowData.Height / 2;*/
@@ -87,35 +85,24 @@ void Draw::DrawWin()
 				{
 
 					ImGui::Checkbox(u8"显示玩家", &esp_2D_ShowPlayer_flag);
+
 					ImGui::Checkbox(u8"显示NPC", &esp_2D_ShowNPC_flag);
 
 					ImGui::Checkbox(u8"显示血条", &esp_2D_ShowBlood_flag);
-					/*if (esp_2D_ShowBlood_flag)
-					{
-						ImGui::ColorEdit3(u8"血条颜色", colorBlood);
-						ImGui::Text(u8"");
-					}*/
-
-
-					ImGui::Checkbox(u8"显示名称", &esp_2D_ShowName_flag);
-					if (esp_2D_ShowName_flag)
-					{
-						ImGui::ColorEdit3(u8"玩家名称颜色", color2d_ShowName_player);
-						ImGui::ColorEdit3(u8"NPC名称颜色", color2d_ShowName_NPC);
-						ImGui::Text(u8"");
-					}
 					
-
 
 					ImGui::Checkbox(u8"显示数字血量", &esp_2D_ShowbloodNum_flag);
-					if (esp_2D_ShowbloodNum_flag)
+
+					ImGui::Checkbox(u8"显示名称", &esp_2D_ShowName_flag);
+
+					if (esp_2D_ShowName_flag || esp_2D_ShowbloodNum_flag)
 					{
-						ImGui::ColorEdit3(u8"玩家数字血量颜色", colorbloodNum_player);
-						ImGui::ColorEdit3(u8"NPC数字血量颜色", colorbloodNum_NPC);
+						ImGui::ColorEdit3(u8"玩家颜色", color2d_ShowName_player);
+						ImGui::ColorEdit3(u8"NPC颜色", color2d_ShowName_NPC);
 						ImGui::Text(u8"");
 					}
-				
-					
+
+
 					ImGui::Checkbox(u8"显示2D方框", &esp_2D_flag);
 					if (esp_2D_flag)
 					{
@@ -137,7 +124,8 @@ void Draw::DrawWin()
 					ImGui::Checkbox(u8"显示身体", &esp_2D_ShowBone_flag);
 					if (esp_2D_ShowBone_flag)
 					{
-						ImGui::ColorEdit3(u8"身体颜色", colorBone);
+						ImGui::ColorEdit3(u8"玩家身体颜色", colorBone_player);
+						ImGui::ColorEdit3(u8"NPC身体颜色", colorBone_NPC);
 					}
 					
 
@@ -155,9 +143,9 @@ void Draw::DrawWin()
 
 
 						//身体颜色//白色
-						colorBone[0] = 255.0f / 255.f;
-						colorBone[1] = 255.0f / 255.f;
-						colorBone[2] = 255.0f / 255.f;
+						colorBone_NPC[0] = 255.0f / 255.f;
+						colorBone_NPC[1] = 255.0f / 255.f;
+						colorBone_NPC[2] = 255.0f / 255.f;
 
 						//NPC射线颜色//白色
 						colorLine_NPC[0] = 255.0f / 255.f;
@@ -179,15 +167,11 @@ void Draw::DrawWin()
 						color2d_NPC[1] = 255.0f / 255.f;
 						color2d_NPC[2] = 255.0f / 255.f;
 
-						//血条颜色//IMCOLOR_深红色 ImColor(254,67,101)
-						colorBlood[0] = 254.0f / 255.f;
-						colorBlood[1] = 67.0f / 255.f;
-						colorBlood[2] = 101.0f / 255.f;
+						//玩家身体颜色///IMCOLOR_淡青色 ImColor(131,175,155)
+						colorBone_player[0] = 131.0f / 255.f;
+						colorBone_player[1] = 175.0f / 255.f;
+						colorBone_player[2] = 155.0f / 255.f;
 
-						//数字血量颜色//IMCOLOR_浅红色 ImColor(252,157,154)
-						colorbloodNum_player[0] = 252.0f / 255.f;
-						colorbloodNum_player[1] = 157.0f / 255.f;
-						colorbloodNum_player[2] = 154.0f / 255.f;
 					}
 				}
 
@@ -319,14 +303,29 @@ void Draw::DrawWin()
 
 		if (esp_2D_ShowBone_flag)
 		{
-			// 骨骼 0 : 头 7:脖子 8：臀部  5 ，6 手 3,4脚踝，1 2 脚指头
-			DrawBone(m_ped_list, 0, 0, FLOATCOLORTOIMCOLOR(colorBone));
-			DrawBone(m_ped_list, 0, 7, FLOATCOLORTOIMCOLOR(colorBone));
-			DrawBone(m_ped_list, 7, 8, FLOATCOLORTOIMCOLOR(colorBone));
-			DrawBone(m_ped_list, 8, 3, FLOATCOLORTOIMCOLOR(colorBone));
-			DrawBone(m_ped_list, 8, 4, FLOATCOLORTOIMCOLOR(colorBone));
-			DrawBone(m_ped_list, 7, 5, FLOATCOLORTOIMCOLOR(colorBone));
-			DrawBone(m_ped_list, 7, 6, FLOATCOLORTOIMCOLOR(colorBone));
+			if (strcmp(pedName, "") != 0) //玩家
+			{
+				// 骨骼 0 : 头 7:脖子 8：臀部  5 ，6 手 3,4脚踝，1 2 脚指头
+				DrawBone(m_ped_list, 0, 0, FLOATCOLORTOIMCOLOR(colorBone_player));
+				DrawBone(m_ped_list, 0, 7, FLOATCOLORTOIMCOLOR(colorBone_player));
+				DrawBone(m_ped_list, 7, 8, FLOATCOLORTOIMCOLOR(colorBone_player));
+				DrawBone(m_ped_list, 8, 3, FLOATCOLORTOIMCOLOR(colorBone_player));
+				DrawBone(m_ped_list, 8, 4, FLOATCOLORTOIMCOLOR(colorBone_player));
+				DrawBone(m_ped_list, 7, 5, FLOATCOLORTOIMCOLOR(colorBone_player));
+				DrawBone(m_ped_list, 7, 6, FLOATCOLORTOIMCOLOR(colorBone_player));
+			}
+			else
+			{
+				// 骨骼 0 : 头 7:脖子 8：臀部  5 ，6 手 3,4脚踝，1 2 脚指头
+				DrawBone(m_ped_list, 0, 0, FLOATCOLORTOIMCOLOR(colorBone_NPC));
+				DrawBone(m_ped_list, 0, 7, FLOATCOLORTOIMCOLOR(colorBone_NPC));
+				DrawBone(m_ped_list, 7, 8, FLOATCOLORTOIMCOLOR(colorBone_NPC));
+				DrawBone(m_ped_list, 8, 3, FLOATCOLORTOIMCOLOR(colorBone_NPC));
+				DrawBone(m_ped_list, 8, 4, FLOATCOLORTOIMCOLOR(colorBone_NPC));
+				DrawBone(m_ped_list, 7, 5, FLOATCOLORTOIMCOLOR(colorBone_NPC));
+				DrawBone(m_ped_list, 7, 6, FLOATCOLORTOIMCOLOR(colorBone_NPC));
+			}
+			
 		}
 
 		if (!Helpers::IsNullVector2(pedPosV2))
@@ -355,9 +354,9 @@ void Draw::DrawWin()
 			if (esp_2D_ShowbloodNum_flag)
 			{
 				if (strcmp(pedName, "") != 0) //玩家
-					Draw2DHealthText(pedPosV2, pedBoxV2, FLOATCOLORTOIMCOLOR(colorbloodNum_player), ped_Health, ped_MaxHealth, i);
+					Draw2DHealthText(pedPosV2, pedBoxV2, FLOATCOLORTOIMCOLOR(color2d_ShowName_player), ped_Health, ped_MaxHealth, i);
 				else//NPC
-					Draw2DHealthText(pedPosV2, pedBoxV2, FLOATCOLORTOIMCOLOR(colorbloodNum_NPC), ped_Health, ped_MaxHealth, i);
+					Draw2DHealthText(pedPosV2, pedBoxV2, FLOATCOLORTOIMCOLOR(color2d_ShowName_NPC), ped_Health, ped_MaxHealth, i);
 			}
 
 			if (esp_2D_ShowName_flag)
