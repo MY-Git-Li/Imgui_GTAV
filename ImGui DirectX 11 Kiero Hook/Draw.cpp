@@ -11,7 +11,8 @@ ImVec4 Create(float x, float y, float width, float height)
 
 void Draw::DrawWin()
 {
-
+	//ESP相关
+	
 	static bool esp_flag = true;
 
 	static bool esp_2D_flag = true;
@@ -24,7 +25,9 @@ void Draw::DrawWin()
 	static bool esp_2D_ShowPlayer_flag = true;
 	static bool esp_2D_ShowBone_flag = true;
 
-	static float color2d_ShowName_player[3] = { 252.0f / 255.f, 157.0f / 255.f,154.0f / 255.f};
+	//颜色相关
+		
+	static float color2d_ShowName_player[3] = { 252.0f / 255.f, 157.0f / 255.f,154.0f / 255.f };
 	static float color2d_ShowName_NPC[3] = { 1,1,1 };
 
 	static float color2d_player[3] = { 131.0f / 255.f,175.0f / 255.f,155.0f / 255.f };
@@ -35,11 +38,21 @@ void Draw::DrawWin()
 
 	static float colorBone_NPC[3] = { 1,1,1 };
 	static float colorBone_player[3] = { 131.0f / 255.f,175.0f / 255.f,155.0f / 255.f };
-
-
-	/*float gview_width = DataManger::windowData.Width / 2;
-	float gview_height = DataManger::windowData.Height / 2;*/
+		
+	//准心
 	static bool ShowCrosshair = false;
+
+	//武器特殊功能标识
+
+	static int FrameFlag = 0;
+	//弹药相关--标识
+	static int e = 0;
+
+	//弹药相关(经典)-- - 功能
+	static bool	CheckBox_ReloadMult = false;
+	static bool Checkbox_NoRecoil = false;
+	static bool Checkbox_NoSpread = false;
+	static bool Checkbox_Range = false;
 
 	long long m_ped_factory = Memory::ReadMem<long long>(DataManger::hProcess,Globals::WorldPTR);
 	long long m_local_ped = Memory::ReadMem<long long>(DataManger::hProcess,m_ped_factory + 0x08);
@@ -184,13 +197,11 @@ void Draw::DrawWin()
 				ImGui::Checkbox(u8"开启AimBot", &Setting::Aimbot_Falgs);
 				ImGui::Checkbox(u8"显示准星", &ShowCrosshair);
 
-				
-
 				if (Setting::Aimbot_Falgs)
 				{
 					const char* items[] = {u8"CTRL",u8"鼠标左键",u8"鼠标右键",u8"ALT",u8"SHIFT"};
 					static int item_current_idx = 0; // Here we store our selection data as an index.
-					ImGui::Combo("AimBot 按键", &item_current_idx, items, IM_ARRAYSIZE(items));
+					ImGui::Combo(u8"AimBot按键", &item_current_idx, items, IM_ARRAYSIZE(items));
 					switch (item_current_idx)
 					{
 					case 0:
@@ -223,7 +234,45 @@ void Draw::DrawWin()
 			}
 
 
+			if (ImGui::BeginTabItem(u8"武器"))
+			{
+				
+				if (ImGui::CollapsingHeader(u8"弹药相关"))
+				{
+					ImGui::RadioButton(u8"默认", &e, 0); ImGui::SameLine();
+					ImGui::RadioButton(u8"无限弹药", &e, 1); ImGui::SameLine();
+					ImGui::RadioButton(u8"无限弹夹", &e, 2); ImGui::SameLine();
+					ImGui::RadioButton(u8"无限弹药和弹夹", &e, 3);
 
+					Weapon::AmmoModifier(e);
+					
+				}
+				
+				if (ImGui::CollapsingHeader(u8"弹药相关 (经典)"))
+				{
+					
+					ImGui::Checkbox(u8"快速换弹",&CheckBox_ReloadMult);
+
+					ImGui::Checkbox(u8"无后座",&Checkbox_NoRecoil);
+					
+					ImGui::Checkbox(u8"无子弹扩散",&Checkbox_NoSpread);
+						
+					ImGui::Checkbox(u8"提升射程", &Checkbox_Range);
+					
+				}
+
+
+				if (ImGui::CollapsingHeader(u8"特殊功能"))
+				{
+					ImGui::RadioButton(u8"默认", &FrameFlag, 1); ImGui::SameLine();
+					ImGui::RadioButton(u8"燃烧子弹", &FrameFlag, 2); ImGui::SameLine();
+					ImGui::RadioButton(u8"爆照子弹", &FrameFlag, 3);
+
+				}
+
+				
+				ImGui::EndTabItem();
+			}
 
 
 
@@ -237,16 +286,58 @@ void Draw::DrawWin()
 		ImGui::End();
 	}
 
+	//显示准心
 	if (ShowCrosshair)
 	{
 		DrawCrosshair(IMCOLOR_淡青色, 12.0f);
 	}
+
+	//特殊效果
+	switch (FrameFlag)
+	{
+	case 2:
+		DataManger::Write<int>(Globals::WorldPTR, READ_WRITE_OFFSET_PARAMETER(Offsets::SpecialAmmo), (int)1 << 12);
+		break;
+	case 3:
+		DataManger::Write<int>(Globals::WorldPTR, READ_WRITE_OFFSET_PARAMETER(Offsets::SpecialAmmo), (int)1 << 11);
+		break;
+	default:
+		break;
+	}
+
+	//弹药类型
+	switch (e)
+	{
+		Weapon::AmmoModifier(e);
+	}
+
+	//弹药相关 (经典) ---功能
+	{
+		if (CheckBox_ReloadMult)
+		{
+			Weapon::ReloadMult(true);
+		}
+
+		if (Checkbox_NoRecoil)
+		{
+			Weapon::NoRecoil();
+		}
+		if (Checkbox_NoSpread)
+		{
+			Weapon::NoSpread();
+		}
+		if (Checkbox_Range)
+		{
+			Weapon::Range();
+		}
+	}
 	
+
 	char TT[256] = { 0 };
 	sprintf_s(TT, u8"%.1f FPS\n玩家数量%d \nPed数量:%d\nW:%d H:%d", ImGui::GetIO().Framerate,playerCount, m_cur_peds,gview_width,gview_height);
 	ImGui::GetForegroundDrawList()->AddText(font, font->FontSize,ImVec2(10,100), IMCOLOR_深红色, TT);
 
-
+	//显示自瞄范围
 	if (Setting::Aimbot_ShowFov)
 	{
 		ImGui::GetForegroundDrawList()->AddCircle(ImVec2(gview_width, gview_height), Setting::AimBot_Fov, IMCOLOR_WHITE,100);

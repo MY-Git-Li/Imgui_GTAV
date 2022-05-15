@@ -31,6 +31,9 @@
     <Filter Include="Setting">
       <UniqueIdentifier>{4fdaf3f6-bf3d-46b9-9bcb-32c5ffa4d798}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameData\Entity">
+      <UniqueIdentifier>{309f2e04-5390-4e45-bef1-a450fb4c591a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="kiero\minhook\src\buffer.c">
@@ -101,6 +104,9 @@
     </ClCompile>
     <ClCompile Include="Setting.cpp">
       <Filter>Setting</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon.cpp">
+      <Filter>GameData\Entity</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -201,6 +207,9 @@
     </ClInclude>
     <ClInclude Include="Setting.h">
       <Filter>Setting</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon.h">
+      <Filter>GameData\Entity</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

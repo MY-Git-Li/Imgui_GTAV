@@ -11,7 +11,7 @@ void Aimbot::AimbotThread()
 		ImVec3 teleW_pedCoords = ImVec3(0, 0, 0);
 
 		// 玩家自己RID
-		long long myRID = Memory::ReadMem<long long>(DataManger::hProcess,Globals::WorldPTR, Offsets::RID,sizeof(Offsets::RID)/ sizeof(Offsets::RID[0]));
+		long long myRID = Memory::ReadMem<long long>(DataManger::hProcess,Globals::WorldPTR, READ_WRITE_OFFSET_PARAMETER(Offsets::RID));
 
 		// 相机坐标
 		long long pCCameraPTR = Memory::ReadMem<long long>(DataManger::hProcess,Globals::CCameraPTR);
@@ -19,11 +19,11 @@ void Aimbot::AimbotThread()
 		pCCameraPTR_0 = Memory::ReadMem<long long>(DataManger::hProcess,pCCameraPTR_0 + 0x3C0);
 		ImVec3 cameraV3Pos = Memory::ReadMem<ImVec3>(DataManger::hProcess, pCCameraPTR_0 + 0x60);
 
-		int a[] = { 0x30 };
+		int offset[] = { 0x30 };
 		// 是否是第一人称，当Fov=0为第一人称或者开镜状态，第三人称50
-		float isFPP = Memory::ReadMem<float>(DataManger::hProcess, pCCameraPTR_0 + 0x10, a,1);
+		float isFPP = Memory::ReadMem<float>(DataManger::hProcess, pCCameraPTR_0 + 0x10, READ_WRITE_OFFSET_PARAMETER(offset));
 		// 玩家是否处于载具中，或者掩护状态（载具/掩体=0，正常=16）
-		byte isPlayerInCar = Memory::ReadMem<byte>(DataManger::hProcess, Globals::WorldPTR, Offsets::InVehicle, sizeof(Offsets::InVehicle) / sizeof(Offsets::InVehicle[0]));
+		byte isPlayerInCar = Memory::ReadMem<byte>(DataManger::hProcess, Globals::WorldPTR, READ_WRITE_OFFSET_PARAMETER(Offsets::InVehicle));
 
 		// Ped实体
 		long long pReplayInterfacePTR = Memory::ReadMem<long long>(DataManger::hProcess,Globals::ReplayInterfacePTR);

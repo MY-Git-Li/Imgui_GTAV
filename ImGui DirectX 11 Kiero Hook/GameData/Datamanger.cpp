@@ -73,7 +73,7 @@ WindowData DataManger::GetGameWindowData()
 }
 
 
-long long FindPattern(string pattern)
+long long DataManger::FindPattern(string pattern)
 {
 	vector<unsigned __int64> ResultArray;
 	int count = Memory::FindPattern(DataManger::hProcess, pattern.c_str(), DataManger::baseAddress, DataManger::baseAddress + DataManger::moduleSize, 1, ResultArray);
@@ -88,7 +88,6 @@ long long FindPattern(string pattern)
 	
 	
 }
-
 
 long long Rip_37(long long address)
 {
@@ -111,40 +110,40 @@ void DataManger::DataInit()
 
 	DataManger::windowData = DataManger::GetGameWindowData();
 
-	Globals::TempPTR = FindPattern(Offsets::Mask::WorldMask);
+	Globals::TempPTR = DataManger::FindPattern(Offsets::Mask::WorldMask);
 	Globals::WorldPTR = Rip_37(Globals::TempPTR);
 
-	Globals::TempPTR = FindPattern(Offsets::Mask::BlipMask);
+	Globals::TempPTR = DataManger::FindPattern(Offsets::Mask::BlipMask);
 	Globals::BlipPTR = Rip_37(Globals::TempPTR);
 
-	Globals::TempPTR = FindPattern(Offsets::Mask::GlobalMask);
+	Globals::TempPTR = DataManger::FindPattern(Offsets::Mask::GlobalMask);
 	Globals::GlobalPTR = Rip_37(Globals::TempPTR);
 
-	Globals::TempPTR = FindPattern(Offsets::Mask::PlayerchatterNameMask);
+	Globals::TempPTR = DataManger::FindPattern(Offsets::Mask::PlayerchatterNameMask);
 	Globals::PlayerChatterNamePTR = Rip_37(Globals::TempPTR);
 
-	Globals::TempPTR = FindPattern(Offsets::Mask::NetworkPlayerMgrMask);
+	Globals::TempPTR = DataManger::FindPattern(Offsets::Mask::NetworkPlayerMgrMask);
 	Globals::NetworkPlayerMgrPTR = Rip_37(Globals::TempPTR);
 
-	Globals::TempPTR = FindPattern(Offsets::Mask::ReplayInterfaceMask);
+	Globals::TempPTR = DataManger::FindPattern(Offsets::Mask::ReplayInterfaceMask);
 	Globals::ReplayInterfacePTR = Rip_37(Globals::TempPTR);
 
-	Globals::TempPTR = FindPattern(Offsets::Mask::WeatherMask);
+	Globals::TempPTR = DataManger::FindPattern(Offsets::Mask::WeatherMask);
 	Globals::WeatherPTR = Rip_6A(Globals::TempPTR);
 
-	Globals::TempPTR = FindPattern(Offsets::Mask::UnkModelMask);
+	Globals::TempPTR = DataManger::FindPattern(Offsets::Mask::UnkModelMask);
 	Globals::UnkModelPTR = Rip_37(Globals::TempPTR);
 
-	Globals::TempPTR = FindPattern(Offsets::Mask::PickupDataMask);
+	Globals::TempPTR = DataManger::FindPattern(Offsets::Mask::PickupDataMask);
 	Globals::PickupDataPTR = Rip_37(Globals::TempPTR);
 
-	Globals::TempPTR = FindPattern(Offsets::Mask::ViewPortMask);
+	Globals::TempPTR = DataManger::FindPattern(Offsets::Mask::ViewPortMask);
 	Globals::ViewPortPTR = Rip_37(Globals::TempPTR);
 
-	Globals::TempPTR = FindPattern(Offsets::Mask::AimingPedMask);
+	Globals::TempPTR = DataManger::FindPattern(Offsets::Mask::AimingPedMask);
 	Globals::AimingPedPTR = Rip_37(Globals::TempPTR);
 
-	Globals::TempPTR = FindPattern(Offsets::Mask::CCameraMask);
+	Globals::TempPTR = DataManger::FindPattern(Offsets::Mask::CCameraMask);
 	Globals::CCameraPTR = Rip_37(Globals::TempPTR);
 
 }

@@ -14,5 +14,18 @@ const string Offsets::Mask::PickupDataMask = "48 8B 05 ?? ?? ?? ?? 48 8B 1C F8 8
 const string Offsets::Mask::UnkModelMask = "4C 8B 15 ?? ?? ?? ?? 49 8B 04 D2 44 39 40 08";
 const string Offsets::Mask::PlayerchatterNameMask = "48 8D 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? 83";
 
-int Offsets::RID[3] = { 0x08, 0x10C8, 0x90 };
-int Offsets::InVehicle[2] = { 0x08, 0x14C7 };
+int	Offsets::RID[3] = { 0x08, 0x10C8, 0x90 };
+int	Offsets::InVehicle[2] = { 0x08, 0x14C7 };
+
+int Offsets::SpecialAmmo[3] = { 0x08, 0x10C8, 0x218 };
+
+int  Offsets::Weapon::AmmoInfo[4] = { 0x08, 0x10D8, 0x20, 0x60 };
+int  Offsets::Weapon::AmmoModifier[3] = { 0x08, 0x10D0, 0x78 };
+int  Offsets::Weapon::NoSpread[4] = { 0x8, 0x10D8, 0x20, 0x7C };
+int  Offsets::Weapon::NoRecoil[4] = { 0x8, 0x10D8, 0x20, 0x2F4 };
+int  Offsets::Weapon::ImpactType[4] = { 0x08, 0x10D8, 0x20, 0x20 };
+int  Offsets::Weapon::ImpactExplosion[4] = { 0x08, 0x10D8, 0x20, 0x24 };
+int  Offsets::Weapon::Range[4] = { 0x08, 0x10D8, 0x20, 0x28C };
+int  Offsets::Weapon::LockRange[4] = { 0x08, 0x10D8, 0x20, 0x288 };
+int  Offsets::Weapon::ReloadMult[4] = { 0x08, 0x10D8, 0x20, 0x134 };
+int  Offsets::Weapon::ReloadVehicleMult[4] = { 0x08, 0x10D8, 0x20, 0x130 };

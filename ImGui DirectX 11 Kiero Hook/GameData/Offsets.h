@@ -10,7 +10,7 @@ class Offsets
 public:
 	static int RID[3];
 	static int InVehicle[2];
-
+	static int SpecialAmmo[3];
 	class Mask
 	{
 	public:
@@ -28,6 +28,21 @@ public:
 		const static string UnkModelMask;
 		const static string PlayerchatterNameMask;
 
+
+	};
+	class Weapon
+	{
+	public:
+		static int AmmoInfo[4];
+		static int AmmoModifier[3];
+		static int NoSpread[4];
+		static int NoRecoil[4];
+		static int ImpactType[4];
+		static int ImpactExplosion[4];
+		static int Range[4];
+		static int LockRange[4];
+		static int ReloadMult[4];
+		static int ReloadVehicleMult[4];
 
 	};
 };

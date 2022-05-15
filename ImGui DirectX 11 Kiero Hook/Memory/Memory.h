@@ -98,7 +98,7 @@ public:
 			}
 			else
 			{
-				WriteProcessMemory(processHandle, (LPCVOID)((*(T2*)buffer + Offset[i])), vaule, sizeof(T1), NULL);
+				WriteProcessMemory(processHandle, (LPVOID)((*(T2*)buffer + Offset[i])), &vaule, sizeof(T1), NULL);
 			}
 		}
 

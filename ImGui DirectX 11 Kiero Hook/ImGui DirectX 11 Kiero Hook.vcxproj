@@ -166,6 +166,7 @@
     <ClCompile Include="Memory\AobScan.cpp" />
     <ClCompile Include="Memory\Memory.cpp" />
     <ClCompile Include="Setting.cpp" />
+    <ClCompile Include="Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="kiero\minhook\dll_resources\MinHook.def" />
@@ -205,6 +206,7 @@
     <ClInclude Include="Memory\AobScan.h" />
     <ClInclude Include="Memory\Memory.h" />
     <ClInclude Include="Setting.h" />
+    <ClInclude Include="Weapon.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
